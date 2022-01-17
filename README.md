@@ -8,7 +8,7 @@ Usage
 -----
 
 **Example Usage**
-    ``$deepwalk --input example_graphs/karate.adjlist --output karate.embeddings``
+    ``$python deepwalk/__input__.py --input example_graphs/cora --output cora.embeddings``
 
 **--input**:  *input_filename*
 
