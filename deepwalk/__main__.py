@@ -128,7 +128,7 @@ def main():
     parser.add_argument('--representation-size', default = 64, type = int, 
                         help = 'Number of latent dimensions to learn for each node.')
 
-    parser.add_argument('--seed', default = 0, type = int, 
+    parser.add_argument('--seed', default = 0, type = int,
                         help = 'Seed for random walk generator.')
 
     parser.add_argument('--undirected', default = True, type = bool, 
