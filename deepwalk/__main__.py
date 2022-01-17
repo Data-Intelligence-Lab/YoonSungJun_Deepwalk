@@ -77,23 +77,17 @@ def process(args):
     print("Number of walks: {}".format(num_walks))
     data_size = num_walks * args.walk_length
     print("Data size (walks*length): {}".format(data_size))
-    if data_size < args.max_memory_data_size:  # 메모리에 data가 올라갈 수 있으면
+    if data_size < args.max_memory_data_size:
         print("Walking...")
-        walks = graph.build_deepwalk_corpus(G, num_paths=args.number_walks,
-                                            path_length=args.walk_length, alpha=0, rand=random.Random(args.seed))
+        walks = graph.build_deepwalk_corpus(G, num_paths=args.number_walks, path_length=args.walk_length, alpha=0, rand=random.Random(args.seed))
         print("Training...")
-        model = Word2Vec(walks, vector_size=args.representation_size, window=args.window_size, min_count=0, sg=1, hs=1,
-                         workers=args.workers)
+        model = Word2Vec(walks, vector_size=args.representation_size, window=args.window_size, min_count=0, sg=1, hs=1, workers=args.workers)
         model.wv.save_word2vec_format(args.output)
     else:
-        print("Data size {} is larger than limit (max-memory-data-size: {}).  Dumping walks to disk.".format(data_size,
-                                                                                                             args.max_memory_data_size))
+        print("Data size {} is larger than limit (max-memory-data-size: {}).  Dumping walks to disk.".format(data_size, args.max_memory_data_size))
         print("Walking...")
         walks_filebase = args.output + ".walks"
-        walk_files = serialized_walks.write_walks_to_disk(G, walks_filebase, num_paths=args.number_walks,
-                                                          path_length=args.walk_length, alpha=0,
-                                                          rand=random.Random(args.seed),
-                                                          num_workers=args.workers)
+        walk_files = serialized_walks.write_walks_to_disk(G, walks_filebase, num_paths=args.number_walks, path_length=args.walk_length, alpha=0, rand=random.Random(args.seed), num_workers=args.workers)
 
     ##참고
     node_classification(model, nx_G)
@@ -116,7 +110,6 @@ def tsne_visualization(model):
 
     fig = plt.figure()
     ax = fig.gca(projection='3d')
-    # plt.axes().set(aspect="equal")
     ax.scatter(
         node_embeddings_3d[:, 0],
         node_embeddings_3d[:, 1],
@@ -143,12 +136,7 @@ def node_classification(model, nx_G):
         if 'label' not in n[1].keys():
             n[1]['label'] = 7
     plt.figure(figsize=(12, 6), dpi=600)
-    nx.draw_networkx(nx_G, pos=nx.layout.spring_layout(nx_G),
-                     node_color=[[n[1]['label'] for n in nx_G.nodes(data=True)]],
-                     cmap=plt.cm.rainbow,
-                     node_shape='.',
-                     font_size='2'
-                     )
+    nx.draw_networkx(nx_G, pos=nx.layout.spring_layout(nx_G), node_color=[[n[1]['label'] for n in nx_G.nodes(data=True)]], cmap=plt.cm.rainbow, node_shape='.', font_size='2' )
 
     plt.axis('off')
     plt.savefig('img.png', bbox_inches='tight', pad_inches=0)
